@@ -32,9 +32,10 @@ public class PartidaDeXadrez {
 	}
 	
 	private void configuracaoInicial() {
-		tabuleiro.pecaDeLugar(new Torre(tabuleiro, Color.BRANCO), new Posicao(2, 1));
-		tabuleiro.pecaDeLugar(new Rei(tabuleiro, Color.BRANCO), new Posicao(0, 4));
-		tabuleiro.pecaDeLugar(new Rei(tabuleiro, Color.PRETO), new Posicao(7, 4));
+		tabuleiro.colocaPecaNaPosicao(new Torre(tabuleiro, Color.BRANCO), new Posicao(2, 1));
+		tabuleiro.colocaPecaNaPosicao(new Rei(tabuleiro, Color.BRANCO), new Posicao(0, 4));
+		tabuleiro.colocaPecaNaPosicao(new Rei(tabuleiro, Color.PRETO), new Posicao(7, 4));
+		
 	}
 	
 	
