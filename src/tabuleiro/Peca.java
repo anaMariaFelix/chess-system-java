@@ -6,10 +6,12 @@ public class Peca {
 	
 	public Peca(Tabuleiro tabuleiro) {
 		this.tabuleiro = tabuleiro;
+		
 	}
 
 	protected Tabuleiro getTabuleiro() {
 		return tabuleiro;
+		
 	}
 
 	

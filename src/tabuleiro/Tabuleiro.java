@@ -1,10 +1,10 @@
 package tabuleiro;
-
+			//Board
 public class Tabuleiro {
 	private int linhas;
 	private int colunas;
 	private Peca[][] pecas;
-	
+			
 	public Tabuleiro(int linhas, int colunas) {
 		
 		this.linhas = linhas;
@@ -34,10 +34,21 @@ public class Tabuleiro {
 	}
 	
 	
-	public Peca paca(Posicao posicao) {
+	public Peca paca(Posicao posicao) {//retorna a peça que esta nessa posiçao
 		
 		return pecas[posicao.getLinha()][posicao.getColuna()];
 		
 	}
+	
+	public void pecaDeLugar(Peca peca, Posicao posicao) {//muda a peça de posição de acordo com a posição que chega
+		 
+		pecas[posicao.getLinha()][posicao.getColuna()] = peca;
+				
+		peca.posicao = posicao;		
+		
+	}
+	
+	
+	
 	
 }

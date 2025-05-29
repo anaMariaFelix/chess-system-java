@@ -1,6 +1,9 @@
 package xadrez;
 
+import tabuleiro.Posicao;
 import tabuleiro.Tabuleiro;
+import xadrez.pecas.Rei;
+import xadrez.pecas.Torre;
 
 			//chessMatch
 public class PartidaDeXadrez { 
@@ -9,6 +12,7 @@ public class PartidaDeXadrez {
 	
 	public PartidaDeXadrez() {
 		tabuleiro = new Tabuleiro(8, 8);
+		configuracaoInicial();
 		
 	}
 	
@@ -25,6 +29,12 @@ public class PartidaDeXadrez {
 		}
 		
 		return matriz;
+	}
+	
+	private void configuracaoInicial() {
+		tabuleiro.pecaDeLugar(new Torre(tabuleiro, Color.BRANCO), new Posicao(2, 1));
+		tabuleiro.pecaDeLugar(new Rei(tabuleiro, Color.BRANCO), new Posicao(0, 4));
+		tabuleiro.pecaDeLugar(new Rei(tabuleiro, Color.PRETO), new Posicao(7, 4));
 	}
 	
 	
