@@ -9,7 +9,7 @@ public class PosicaoXadrez {
 	
 	public PosicaoXadrez(char coluna, int linha) {
 		if(coluna < 'a' || coluna >'h' || linha < 1 || linha > 8) {
-			throw new XadrezException("ERRO: Na instancia da Posição do xadrez. forneca valores entre a1 e h8");
+			throw new XadrezException("ERRO: Lendo a Posição. forneca valores entre a1 e h8");
 		}
 		this.coluna = coluna;
 		this.linha = linha;
