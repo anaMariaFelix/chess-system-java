@@ -3,8 +3,8 @@ package xadrez;
 import tabuleiro.Peca;
 import tabuleiro.Tabuleiro;
 
-			//ChessPiece
-public class PecaXadrez extends Peca{
+					//ChessPiece
+public abstract class PecaXadrez extends Peca{
 
 	private Color corDaPeca;
 	
@@ -17,5 +17,6 @@ public class PecaXadrez extends Peca{
 	public Color getCorDaPeca() {
 		return corDaPeca;
 	}
+
 
 }
