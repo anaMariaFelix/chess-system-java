@@ -43,7 +43,8 @@ public class Tabuleiro {
 		
 	}
 	
-	public void colocaPecaNaPosicao(Peca peca, Posicao posicao) {//muda a peça de posição de acordo com a posição que chega
+				//placePiece
+	public void coloquePeca(Peca peca, Posicao posicao) {//muda a peça de posição de acordo com a posição que chega
 		if(existePecaNessaPosicao(posicao)) {
 			throw new TabuleiroException("já existe peças nessa posição: "+ posicao);
 		}
