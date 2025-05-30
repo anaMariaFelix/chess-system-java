@@ -9,14 +9,28 @@ import xadrez.pecas.Torre;
 			//chessMatch
 public class PartidaDeXadrez { 
 
+	private int turno;
+	private Color jogadorAtual; //currentPlay
 	private Tabuleiro tabuleiro;
 	
 	public PartidaDeXadrez() {
 		tabuleiro = new Tabuleiro(8, 8);
+		turno = 1;
+		jogadorAtual = Color.WHITE;
+		
 		configuracaoInicial();
 		
 	}
 	
+	public int getTurno() {
+		return turno;
+	}
+
+	public Color getJogadorAtual() {
+		return jogadorAtual;
+	}
+
+
 	public PecaXadrez[][] getPecas() {//retornar a matriz com as peças do jogo
 		
 		PecaXadrez[][] matriz = new PecaXadrez[tabuleiro.getLinhas()][tabuleiro.getColunas()];
@@ -49,6 +63,7 @@ public class PartidaDeXadrez {
 		
 		Peca capturaPeca = facaMovimento(origem, alvo);
 		
+		nextTurno();
 		return (PecaXadrez)capturaPeca;
 	}
 	
@@ -66,6 +81,10 @@ public class PartidaDeXadrez {
 		if(!tabuleiro.existePecaNessaPosicao(origem)) {
 			throw new XadrezException("Não há nenhuma peça na posição: ");
 		}
+							//Dwon Cast
+		if(jogadorAtual != ((PecaXadrez) tabuleiro.peca(origem)).getCorDaPeca()) {//se a cor do jogador atual for deiferente da cor do jogador que estaa na posição de origem
+			throw new XadrezException("Essa peça não é sua!");
+		}
 		
 		if(!tabuleiro.peca(origem).existeAlgumaMovimentaçãoPossível()) {
 			throw new XadrezException("Não existe movimentos possiveis para a peça escolhida! ");
@@ -80,6 +99,11 @@ public class PartidaDeXadrez {
 			
 	}
 	
+	private void nextTurno() {
+		turno++;
+		jogadorAtual = (jogadorAtual == Color.WHITE)? Color.BLACK : Color.WHITE; //if ternario para mudar a cor do proximo jogador
+	}
+	
 	private void coloqueNovaPeça(char coluna, int linha, PecaXadrez peca) {
 		PosicaoXadrez posicaoXadrez = new PosicaoXadrez(coluna, linha);
 		tabuleiro.colocaPecaNaPosicao(peca, posicaoXadrez.toPosicao());
@@ -91,13 +115,13 @@ public class PartidaDeXadrez {
 		coloqueNovaPeça('d', 2, new Torre(tabuleiro, Color.WHITE));
 		coloqueNovaPeça('e', 2, new Torre(tabuleiro, Color.WHITE));
 		coloqueNovaPeça('e', 1, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('d', 1, new Rei(tabuleiro, Color.WHITE));
+		coloqueNovaPeça('d', 1, new Rei(tabuleiro, Color.BLACK));
 
-		coloqueNovaPeça('c', 7, new Torre(tabuleiro, Color.BLACK));
-		coloqueNovaPeça('c', 8, new Torre(tabuleiro, Color.BLACK));
-		coloqueNovaPeça('d', 7, new Torre(tabuleiro, Color.BLACK));
-		coloqueNovaPeça('e', 7, new Torre(tabuleiro, Color.BLACK));
-		coloqueNovaPeça('e', 8, new Torre(tabuleiro, Color.BLACK));
+		coloqueNovaPeça('c', 7, new Torre(tabuleiro, Color.WHITE));
+		coloqueNovaPeça('c', 8, new Torre(tabuleiro, Color.WHITE));
+		coloqueNovaPeça('d', 7, new Torre(tabuleiro, Color.WHITE));
+		coloqueNovaPeça('e', 7, new Torre(tabuleiro, Color.WHITE));
+		coloqueNovaPeça('e', 8, new Torre(tabuleiro, Color.WHITE));
 		coloqueNovaPeça('d', 8, new Rei(tabuleiro, Color.BLACK));
 		
 	}

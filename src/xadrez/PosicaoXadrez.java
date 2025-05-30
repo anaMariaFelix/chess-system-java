@@ -2,6 +2,7 @@ package xadrez;
 
 import tabuleiro.Posicao;
 
+			//ChessPosition
 public class PosicaoXadrez {
 
 	private char coluna;
