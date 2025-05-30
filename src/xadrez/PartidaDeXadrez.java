@@ -1,5 +1,8 @@
 package xadrez;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tabuleiro.Peca;
 import tabuleiro.Posicao;
 import tabuleiro.Tabuleiro;
@@ -12,6 +15,9 @@ public class PartidaDeXadrez {
 	private int turno;
 	private Color jogadorAtual; //currentPlay
 	private Tabuleiro tabuleiro;
+	
+	List<Peca> listaPecasDoTabuleiro = new ArrayList<>();
+	List<Peca> listaPecasCapturadas = new ArrayList<>();
 	
 	public PartidaDeXadrez() {
 		tabuleiro = new Tabuleiro(8, 8);
@@ -70,10 +76,16 @@ public class PartidaDeXadrez {
 	
 
 	private Peca facaMovimento(Posicao origem, Posicao alvo) {
-		Peca p = tabuleiro.removePeca(origem);
-		Peca pecaCapturada = tabuleiro.removePeca(alvo);
+		Peca p = tabuleiro.removePeca(origem); //remove a peça que o usuario que mecher
+		Peca pecaCapturada = tabuleiro.removePeca(alvo);//remove a peça que esta no lugar que o usuario que colocar a peça que ele esta movendo
 		
 		tabuleiro.colocaPecaNaPosicao(p, alvo);
+		
+		if(pecaCapturada != null) {//sempre que a peça capturada for diferente de nulo ela é removida da lista de peças do tabuleiro e adicionada na lista de peças capturadas
+			listaPecasDoTabuleiro.remove(pecaCapturada);
+			listaPecasCapturadas.add(pecaCapturada);
+		}
+		
 		return pecaCapturada;
 	}
 
@@ -107,6 +119,8 @@ public class PartidaDeXadrez {
 	private void coloqueNovaPeça(char coluna, int linha, PecaXadrez peca) {
 		PosicaoXadrez posicaoXadrez = new PosicaoXadrez(coluna, linha);
 		tabuleiro.colocaPecaNaPosicao(peca, posicaoXadrez.toPosicao());
+		
+		listaPecasDoTabuleiro.add(peca);
 	}
 	
 	private void configuracaoInicial() {
@@ -117,11 +131,11 @@ public class PartidaDeXadrez {
 		coloqueNovaPeça('e', 1, new Torre(tabuleiro, Color.WHITE));
 		coloqueNovaPeça('d', 1, new Rei(tabuleiro, Color.BLACK));
 
-		coloqueNovaPeça('c', 7, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('c', 8, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('d', 7, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('e', 7, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('e', 8, new Torre(tabuleiro, Color.WHITE));
+		coloqueNovaPeça('c', 7, new Torre(tabuleiro, Color.BLACK));
+		coloqueNovaPeça('c', 8, new Torre(tabuleiro, Color.BLACK));
+		coloqueNovaPeça('d', 7, new Torre(tabuleiro, Color.BLACK));
+		coloqueNovaPeça('e', 7, new Torre(tabuleiro, Color.BLACK));
+		coloqueNovaPeça('e', 8, new Torre(tabuleiro, Color.BLACK));
 		coloqueNovaPeça('d', 8, new Rei(tabuleiro, Color.BLACK));
 		
 	}
