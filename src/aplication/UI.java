@@ -57,18 +57,36 @@ public class UI {
 			System.out.print((8 - i) + " ");
 			
 			for(int j = 0; j < pecas.length; j++) {
-				printPecas(pecas[i][j]);
+				printPecas(pecas[i][j], false);
 			}
 			System.out.println();
 		}
 		System.out.print("  a b c d e f g h");
 	}
 	
+	public static void printTabuleiro(PecaXadrez[][] pecas, boolean[][] possivelMovimento) {
+		for(int i = 0; i < pecas.length; i++) {
+			System.out.print((8 - i) + " ");
+			
+			for(int j = 0; j < pecas.length; j++) {
+				printPecas(pecas[i][j], possivelMovimento[i][j]);
+			}
+			System.out.println();
+		}
+		System.out.print("  a b c d e f g h");
+		
+	}
 	
-	private static void printPecas(PecaXadrez peca) {
+	private static void printPecas(PecaXadrez peca, boolean background) {
+		if(background) {
+			
+			System.out.print(ANSI_BLUE_BACKGROUND);//COLORE o fundo da peça
+		}
+		
     	if (peca == null) {
-            System.out.print("-");
+            System.out.print("-" + ANSI_RESET);
         }
+    	
         else { //Verifica se as peças são brancas ou pretas, se for brancas ele deixa branco se for pratas ele deixa amarelas para poder destacar no fundo do console que é preto
             if (peca.getCorDaPeca() == Color.WHITE) {
                 System.out.print(ANSI_WHITE + peca + ANSI_RESET);//depois reseta a cor
@@ -79,4 +97,6 @@ public class UI {
         }
         System.out.print(" ");
 	}
+
+	
 }
