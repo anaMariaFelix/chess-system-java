@@ -71,12 +71,12 @@ public class Tabuleiro {
 		return pecaAux;
 	}
 	
-	private boolean existePosicao(int linha, int coluna) {
+	public boolean existePosicao(int linha, int coluna) {
 		
 		return linha >= 0 && linha < this.linhas && coluna >= 0 && coluna < this.colunas;
 	}
 	
-	private boolean existePosicao(Posicao posicao) {
+	public boolean existePosicao(Posicao posicao) {
 		return existePosicao(posicao.getLinha(), posicao.getColuna());
 	}
 	
