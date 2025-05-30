@@ -1,7 +1,11 @@
 package aplication;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import xadrez.Color;
 import xadrez.PecaXadrez;
+import xadrez.PosicaoXadrez;
 
 public class UI {
 
@@ -29,6 +33,19 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 	
+	public static PosicaoXadrez lerPosicaoXadrez(Scanner scanner) {
+		try {
+			String s = scanner.nextLine();
+			char coluna = s.charAt(0);
+			int linha = Integer.parseInt(s.substring(1));
+			
+			return new PosicaoXadrez(coluna, linha);
+			
+		}catch(RuntimeException e) {
+			throw new InputMismatchException("ERRO: Na instancia da Posição do xadrez. forneca valores entre a1 e h8");
+		}
+	}
+	
 	public static void printTabuleiro(PecaXadrez[][] pecas) {
 		
 		for(int i = 0; i < pecas.length; i++) {
@@ -47,9 +64,9 @@ public class UI {
     	if (peca == null) {
             System.out.print("-");
         }
-        else {
+        else { //Verifica se as peças são brancas ou pretas, se for brancas ele deixa branco se for pratas ele deixa amarelas para poder destacar no fundo do console que é preto
             if (peca.getCorDaPeca() == Color.WHITE) {
-                System.out.print(ANSI_WHITE + peca + ANSI_RESET);
+                System.out.print(ANSI_WHITE + peca + ANSI_RESET);//depois reseta a cor
             }
             else {
                 System.out.print(ANSI_YELLOW + peca + ANSI_RESET);

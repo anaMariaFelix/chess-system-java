@@ -1,6 +1,8 @@
 package tabuleiro;
+
 			//Board
 public class Tabuleiro {
+	
 	private int linhas;
 	private int colunas;
 	private Peca[][] pecas;
@@ -28,7 +30,7 @@ public class Tabuleiro {
 			throw new TabuleiroException("Posição não existente no tabuleiro!");
 		}
 		
-		return pecas[linha][coluna];
+		return this.pecas[linha][coluna];
 	}
 	
 	
@@ -37,7 +39,7 @@ public class Tabuleiro {
 			throw new TabuleiroException("Posição não existente no tabuleiro!");
 		}
 		
-		return pecas[posicao.getLinha()][posicao.getColuna()];
+		return this.pecas[posicao.getLinha()][posicao.getColuna()];
 		
 	}
 	
@@ -45,10 +47,28 @@ public class Tabuleiro {
 		if(existePecaNessaPosicao(posicao)) {
 			throw new TabuleiroException("já existe peças nessa posição: "+ posicao);
 		}
-		pecas[posicao.getLinha()][posicao.getColuna()] = peca;
+		this.pecas[posicao.getLinha()][posicao.getColuna()] = peca;
 				
 		peca.posicao = posicao;		
 		
+	}
+	
+	public Peca removePeca(Posicao posicao) {
+		
+		if(!existePosicao(posicao)) {
+			throw new TabuleiroException("Posição não ixiste no tabuleiro!");
+		}
+		
+		if(this.peca(posicao) == null) {
+			return null;
+		}
+		
+		Peca pecaAux = this.peca(posicao);
+		pecaAux.posicao = null;
+		
+		this.pecas[posicao.getLinha()][posicao.getColuna()] = null;
+		
+		return pecaAux;
 	}
 	
 	private boolean existePosicao(int linha, int coluna) {
@@ -64,7 +84,8 @@ public class Tabuleiro {
 		if(!existePosicao(posicao)) {
 			throw new TabuleiroException("Posição não existente no tabuleiro!");
 		}
-		return peca(posicao) != null;
+		return this.peca(posicao) != null;
 	}
+	
 	
 }
