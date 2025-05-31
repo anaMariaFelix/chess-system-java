@@ -40,6 +40,12 @@ public class Program {
 					listaPecasCapturadas.add(pecaCapturada);
 				}
 				
+				if(partidaDeXadrez.getPromocao() != null) {
+					System.out.println("Informe a peça que sera promovida: (B/C/T/D)");
+					String tipo = sc.nextLine();
+					partidaDeXadrez.substituirPeçaPromovida(tipo);
+				}
+				
 			}catch(TabuleiroException e) {
 				System.out.println(e.getMessage());
 				sc.nextLine();//vai continuar pedindo as peças, pq o try catch esta dentro de uma estrutura de repetição entao vai mostrar o erro e deixar o usuario continuar jogando

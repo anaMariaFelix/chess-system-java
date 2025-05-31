@@ -1,5 +1,6 @@
 package xadrez;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class PartidaDeXadrez {
 	private boolean check;
 	private boolean checkMate;
 	private PecaXadrez enPassanVunerable;
+	private PecaXadrez promocao;
 	
 	
 	List<Peca> listaPecasDoTabuleiro = new ArrayList<>();
@@ -56,6 +58,10 @@ public class PartidaDeXadrez {
 	
 	public PecaXadrez  getEnPassanVunerable() {
 		return this.enPassanVunerable;
+	}
+	
+	public PecaXadrez  getPromocao() {
+		return this.promocao;
 	}
 
 	public PecaXadrez[][] getPecas() {//retornar a matriz com as peças do jogo
@@ -97,6 +103,15 @@ public class PartidaDeXadrez {
 		}
 		PecaXadrez movePeca = (PecaXadrez)tabuleiro.peca(alvo);
 		
+		//PROMOÇÃO
+		this.promocao = null;
+		if(movePeca instanceof Peao) {
+			if(movePeca.getCorDaPeca() == Color.WHITE && alvo.getLinha() == 0 || movePeca.getCorDaPeca() == Color.BLACK && alvo.getLinha() == 7) {
+				this.promocao = (PecaXadrez)tabuleiro.peca(alvo);
+				this.promocao = substituirPeçaPromovida("D");
+			}
+		}
+		
 		this.check = (testeCheck(oponente(jogadorAtual)))? true : false; //testa se o oponente do jogador atual se colocou em check se tiver a raviavel checke recebe true se n recebe false
 		
 		if(testeCheckMate(oponente(jogadorAtual))) {//verifica se o jogador estar em checkmate
@@ -115,7 +130,34 @@ public class PartidaDeXadrez {
 		return (PecaXadrez)capturaPeca;
 	}
 	
+	public PecaXadrez substituirPeçaPromovida(String tipo) {
+		if(this.promocao == null) {
+			throw new IllegalStateException("Não há peças para serem promovidas!");
+		}
+		
+		if(!tipo.equals("B") && !tipo.equals("C") && !tipo.equals("T") && !tipo.equals("D")) {
+			throw new InvalidParameterException("Tipo de promoção invalido!");
+		}
+		
+		Posicao pos = this.promocao.getPosicaoXadrez().toPosicao();
+		Peca p = tabuleiro.removePeca(pos);
+		listaPecasDoTabuleiro.remove(p);
+		
+		PecaXadrez novaPeca = novaPeca(tipo, this.promocao.getCorDaPeca());
+		tabuleiro.coloquePeca(novaPeca, pos);
+		listaPecasDoTabuleiro.add(novaPeca);
+		
+		return novaPeca;
+		
+	}
 	
+	public PecaXadrez novaPeca(String tipo, Color cor) {
+		
+		if(tipo.equals("B")) return new Bispo(tabuleiro, cor);
+		if(tipo.equals("C")) return new Cavalo(tabuleiro, cor);
+		if(tipo.equals("D")) return new Rainha(tabuleiro, cor);
+		return new Torre(tabuleiro, cor);
+	}
 					//makeMove
 	private Peca facaMovimento(Posicao origem, Posicao alvo) {
 		PecaXadrez p = (PecaXadrez)tabuleiro.removePeca(origem); //remove a peça que o usuario que mecher
