@@ -89,10 +89,10 @@ public class PartidaDeXadrez {
 		
 		this.check = (testeCheck(oponente(jogadorAtual)))? true : false; //testa se o oponente do jogador atual se colocou em check se tiver a raviavel checke recebe true se n recebe false
 		
-		if(testeCheckMate(oponente(jogadorAtual))) {
+		if(testeCheckMate(oponente(jogadorAtual))) {//verifica se o jogador estar em checkmate
 			this.checkMate = true;
 		}else {
-			nextTurno();
+			nextTurno();//se n tiver o jogo pode continuar
 		}
 		
 		
@@ -190,12 +190,12 @@ public class PartidaDeXadrez {
 		return false;
 	}
 	
-	private boolean testeCheckMate(Color cor) {
+	private boolean testeCheckMate(Color cor) {//logica do checkMate
 		if(!testeCheck(cor)) {//verifica se a peça esta em check se n tiver nem precisa fazer mais nada nesse metodo
 			return false;
 		}
 		
-		List<Peca> list = listaPecasDoTabuleiro.stream().filter(x -> ((PecaXadrez)x).getCorDaPeca() == cor).collect(Collectors.toList());
+		List<Peca> list = listaPecasDoTabuleiro.stream().filter(x -> ((PecaXadrez)x).getCorDaPeca() == cor).collect(Collectors.toList());//filtra as peças pela cor
 		
 		for(Peca p : list) {
 			

@@ -8,6 +8,8 @@ import tabuleiro.Tabuleiro;
 public abstract class PecaXadrez extends Peca{
 
 	private Color corDaPeca;
+	private int contagemMovimentos; //moveCount
+	
 	
 	public PecaXadrez(Tabuleiro tabuleiro,Color corDaPeca) {
 		super(tabuleiro);
@@ -18,6 +20,21 @@ public abstract class PecaXadrez extends Peca{
 	public Color getCorDaPeca() {
 		return corDaPeca;
 	}
+	
+				//getMoveCount
+	public int getContagemMovimentos() {
+		return this.contagemMovimentos;
+	}
+				//increaseNoveCount
+	public void incremetaContagemMovimentos() {
+		this.contagemMovimentos++;
+	}
+					//decreaseNoveCount
+	public void decremetaContagemMovimentos() {
+		this.contagemMovimentos--;
+	}
+	
+	
 	
 	protected PosicaoXadrez getPosicaoXadrez() {
 		return PosicaoXadrez.fromPosicao(posicao);//essa posição vem da herança
