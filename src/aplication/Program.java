@@ -42,7 +42,12 @@ public class Program {
 				
 				if(partidaDeXadrez.getPromocao() != null) {
 					System.out.println("Informe a peça que sera promovida: (B/C/T/D)");
-					String tipo = sc.nextLine();
+					String tipo = sc.nextLine().toUpperCase();
+					
+					while(!tipo.equals("B") && !tipo.equals("C") && !tipo.equals("T") && !tipo.equals("D")) {
+						System.out.println("Informe a peça que sera promovida: (B/C/T/D)");
+						tipo = sc.nextLine().toUpperCase();
+					}
 					partidaDeXadrez.substituirPeçaPromovida(tipo);
 				}
 				
