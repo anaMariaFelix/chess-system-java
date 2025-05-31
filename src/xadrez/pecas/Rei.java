@@ -3,13 +3,16 @@ package xadrez.pecas;
 import tabuleiro.Posicao;
 import tabuleiro.Tabuleiro;
 import xadrez.Color;
+import xadrez.PartidaDeXadrez;
 import xadrez.PecaXadrez;
 
 public class Rei extends PecaXadrez{
 
-	public Rei(Tabuleiro tabuleiro, Color corDaPeca) {
+	private PartidaDeXadrez  PartidaDeXadrez;
+	
+	public Rei(Tabuleiro tabuleiro, Color corDaPeca, PartidaDeXadrez  PartidaDeXadrez) {
 		super(tabuleiro, corDaPeca);
-		
+		this.PartidaDeXadrez = PartidaDeXadrez;
 	}
 	
 	@Override
@@ -20,6 +23,13 @@ public class Rei extends PecaXadrez{
 	public boolean podeMover(Posicao posicao) {//diz se o rei pode mover para uma determinada posição
 		PecaXadrez p = (PecaXadrez)getTabuleiro().peca(posicao);
 		return p == null || p.getCorDaPeca() != getCorDaPeca(); //se a posição for nula e se tiver alguma peça for diferente o rei pode se mover
+	}
+	
+					//testRookCastling
+	private boolean testeDeRoqueTorre(Posicao posicao) {
+		PecaXadrez p = (PecaXadrez)getTabuleiro().peca(posicao);
+		
+		return p != null && p instanceof Torre && p.getCorDaPeca() == getCorDaPeca() && p.getContagemMovimentos() == 0;
 	}
 	
 	@Override
@@ -83,6 +93,34 @@ public class Rei extends PecaXadrez{
 		if(getTabuleiro().existePosicao(p) && podeMover(p)) {
 			matrizPossibilidadesRei[p.getLinha()][p.getColuna()] = true;
 		}
+		
+		//ESPECIAL ROCK LADO DO REI/LADO DIREITO
+		if(getContagemMovimentos() == 0 && !PartidaDeXadrez.getCheck()) {
+			Posicao posT1 = new Posicao(posicao.getLinha(),posicao.getColuna() + 3);//3 casas a direita do dei, la vai esta a torre
+			//rock pequeno
+			if(testeDeRoqueTorre(posT1)) {
+				Posicao p1 = new Posicao(posicao.getLinha(),posicao.getColuna() + 1);
+				Posicao p2 = new Posicao(posicao.getLinha(),posicao.getColuna() + 2);
+				
+				if(getTabuleiro().peca(p1) == null && getTabuleiro().peca(p2) == null){
+					matrizPossibilidadesRei[posicao.getLinha()][posicao.getColuna() + 2] = true;
+				}
+			}
+			
+			//rock grande
+			Posicao posT2 = new Posicao(posicao.getLinha(),posicao.getColuna() - 4);
+			if(testeDeRoqueTorre(posT2)) {
+				Posicao p1 = new Posicao(posicao.getLinha(),posicao.getColuna() - 1);
+				Posicao p2 = new Posicao(posicao.getLinha(),posicao.getColuna() - 2);
+				Posicao p3 = new Posicao(posicao.getLinha(),posicao.getColuna() - 3);
+				
+				if(getTabuleiro().peca(p1) == null && getTabuleiro().peca(p2) == null && getTabuleiro().peca(p3) == null){
+					matrizPossibilidadesRei[posicao.getLinha()][posicao.getColuna() - 2] = true;
+				}
+			}
+		}
+		
+		
 		return matrizPossibilidadesRei;
 	}
 
