@@ -22,6 +22,7 @@ public class PartidaDeXadrez {
 	private Tabuleiro tabuleiro;
 	private boolean check;
 	private boolean checkMate;
+	private PecaXadrez enPassanVunerable;
 	
 	
 	List<Peca> listaPecasDoTabuleiro = new ArrayList<>();
@@ -51,6 +52,10 @@ public class PartidaDeXadrez {
 	
 	public boolean  getCheckMate() {
 		return this.checkMate;
+	}
+	
+	public PecaXadrez  getEnPassanVunerable() {
+		return this.enPassanVunerable;
 	}
 
 	public PecaXadrez[][] getPecas() {//retornar a matriz com as peças do jogo
@@ -90,6 +95,7 @@ public class PartidaDeXadrez {
 			
 			throw new XadrezException("Você não pode se colocar em check!");
 		}
+		PecaXadrez movePeca = (PecaXadrez)tabuleiro.peca(alvo);
 		
 		this.check = (testeCheck(oponente(jogadorAtual)))? true : false; //testa se o oponente do jogador atual se colocou em check se tiver a raviavel checke recebe true se n recebe false
 		
@@ -99,6 +105,12 @@ public class PartidaDeXadrez {
 			nextTurno();//se n tiver o jogo pode continuar
 		}
 		
+		//en Pasant
+		if(movePeca instanceof Peao && (alvo.getLinha() == origem.getLinha() - 2 || alvo.getLinha() == origem.getLinha() + 2)) {
+			this.enPassanVunerable = movePeca;
+		}else {
+			this.enPassanVunerable = null;
+		}
 		
 		return (PecaXadrez)capturaPeca;
 	}
@@ -140,6 +152,22 @@ public class PartidaDeXadrez {
 			
 		}
 		
+		//En Pasant
+		if(p instanceof Peao) {
+			if(origem.getColuna() != alvo.getColuna() && pecaCapturada == null) {//se o meu peao mudou de coluna e n capturou nenhuma peça ele vai da um en passant
+				Posicao peaoPosicao;
+				if(p.getCorDaPeca() == Color.WHITE) {
+					peaoPosicao = new Posicao(alvo.getLinha() + 1, alvo.getColuna());//se for uma peça branca a peça capturada vai esta abaixo do peao
+					
+				}else {
+					peaoPosicao = new Posicao(alvo.getLinha() - 1, alvo.getColuna());
+				}
+				pecaCapturada = tabuleiro.removePeca(peaoPosicao);
+				listaPecasCapturadas.add(pecaCapturada);
+				listaPecasDoTabuleiro.remove(pecaCapturada);
+			}
+		}
+		
 		return pecaCapturada;
 	}
 					//undoMove
@@ -177,7 +205,22 @@ public class PartidaDeXadrez {
 			rook.decremetaContagemMovimentos();
 			
 		}
-		
+		//EN PASSANT
+		if(p instanceof Peao) {
+			if(origem.getColuna() != alvo.getColuna() && pecaCapturada == this.enPassanVunerable) {//se o meu peao mudou de coluna e n capturou nenhuma peça ele vai da um en passant
+				PecaXadrez peao = (PecaXadrez)tabuleiro.removePeca(alvo);				
+				Posicao peaoPosicao;
+				
+				if(p.getCorDaPeca() == Color.WHITE) {
+					peaoPosicao = new Posicao(3, alvo.getColuna());//se for uma peça branca a peça capturada vai esta abaixo do peao
+					
+				}else {
+					peaoPosicao = new Posicao(4, alvo.getColuna());
+				}
+				tabuleiro.coloquePeca(peao,peaoPosicao);
+				
+			}
+		}
 	}
 
 	private void validaPosiçãoDeorigem(Posicao origem) {
@@ -293,14 +336,14 @@ public class PartidaDeXadrez {
 		coloqueNovaPeça('f', 1, new Bispo(tabuleiro, Color.WHITE));
 		coloqueNovaPeça('g', 1, new Cavalo(tabuleiro, Color.WHITE));
 		coloqueNovaPeça('h', 1, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('a', 2, new Peao(tabuleiro, Color.WHITE));
-        coloqueNovaPeça('b', 2, new Peao(tabuleiro, Color.WHITE));
-        coloqueNovaPeça('c', 2, new Peao(tabuleiro, Color.WHITE));
-        coloqueNovaPeça('d', 2, new Peao(tabuleiro, Color.WHITE));
-        coloqueNovaPeça('e', 2, new Peao(tabuleiro, Color.WHITE));
-        coloqueNovaPeça('f', 2, new Peao(tabuleiro, Color.WHITE));
-        coloqueNovaPeça('g', 2, new Peao(tabuleiro, Color.WHITE));
-        coloqueNovaPeça('h', 2, new Peao(tabuleiro, Color.WHITE));
+		coloqueNovaPeça('a', 2, new Peao(tabuleiro, Color.WHITE, this));
+        coloqueNovaPeça('b', 2, new Peao(tabuleiro, Color.WHITE, this));
+        coloqueNovaPeça('c', 2, new Peao(tabuleiro, Color.WHITE, this));
+        coloqueNovaPeça('d', 2, new Peao(tabuleiro, Color.WHITE, this));
+        coloqueNovaPeça('e', 2, new Peao(tabuleiro, Color.WHITE, this));
+        coloqueNovaPeça('f', 2, new Peao(tabuleiro, Color.WHITE, this));
+        coloqueNovaPeça('g', 2, new Peao(tabuleiro, Color.WHITE, this));
+        coloqueNovaPeça('h', 2, new Peao(tabuleiro, Color.WHITE, this));
 
         coloqueNovaPeça('a', 8, new Torre(tabuleiro, Color.BLACK));
         coloqueNovaPeça('b', 8, new Cavalo(tabuleiro, Color.BLACK));
@@ -310,14 +353,14 @@ public class PartidaDeXadrez {
         coloqueNovaPeça('f', 8, new Bispo(tabuleiro, Color.BLACK));
         coloqueNovaPeça('g', 8, new Cavalo(tabuleiro, Color.BLACK));
         coloqueNovaPeça('h', 8, new Torre(tabuleiro, Color.BLACK));
-        coloqueNovaPeça('a', 7, new Peao(tabuleiro, Color.BLACK));
-        coloqueNovaPeça('b', 7, new Peao(tabuleiro, Color.BLACK));
-        coloqueNovaPeça('c', 7, new Peao(tabuleiro, Color.BLACK));
-        coloqueNovaPeça('d', 7, new Peao(tabuleiro, Color.BLACK));
-        coloqueNovaPeça('e', 7, new Peao(tabuleiro, Color.BLACK));
-        coloqueNovaPeça('f', 7, new Peao(tabuleiro, Color.BLACK));
-        coloqueNovaPeça('g', 7, new Peao(tabuleiro, Color.BLACK));
-        coloqueNovaPeça('h', 7, new Peao(tabuleiro, Color.BLACK));
+        coloqueNovaPeça('a', 7, new Peao(tabuleiro, Color.BLACK, this));
+        coloqueNovaPeça('b', 7, new Peao(tabuleiro, Color.BLACK, this));
+        coloqueNovaPeça('c', 7, new Peao(tabuleiro, Color.BLACK, this));
+        coloqueNovaPeça('d', 7, new Peao(tabuleiro, Color.BLACK, this));
+        coloqueNovaPeça('e', 7, new Peao(tabuleiro, Color.BLACK, this));
+        coloqueNovaPeça('f', 7, new Peao(tabuleiro, Color.BLACK, this));
+        coloqueNovaPeça('g', 7, new Peao(tabuleiro, Color.BLACK, this));
+        coloqueNovaPeça('h', 7, new Peao(tabuleiro, Color.BLACK, this));
 		
 	}
 	
