@@ -17,6 +17,8 @@ public class PartidaDeXadrez {
 	private Color jogadorAtual; //currentPlay
 	private Tabuleiro tabuleiro;
 	private boolean check;
+	private boolean checkMate;
+	
 	
 	List<Peca> listaPecasDoTabuleiro = new ArrayList<>();
 	List<Peca> listaPecasCapturadas = new ArrayList<>();
@@ -41,6 +43,10 @@ public class PartidaDeXadrez {
 
 	public boolean  getCheck() {
 		return this.check;
+	}
+	
+	public boolean  getCheckMate() {
+		return this.checkMate;
 	}
 
 	public PecaXadrez[][] getPecas() {//retornar a matriz com as peças do jogo
@@ -83,12 +89,18 @@ public class PartidaDeXadrez {
 		
 		this.check = (testeCheck(oponente(jogadorAtual)))? true : false; //testa se o oponente do jogador atual se colocou em check se tiver a raviavel checke recebe true se n recebe false
 		
-		nextTurno();
+		if(testeCheckMate(oponente(jogadorAtual))) {
+			this.checkMate = true;
+		}else {
+			nextTurno();
+		}
+		
+		
 		return (PecaXadrez)capturaPeca;
 	}
 	
 	
-
+					//makeMove
 	private Peca facaMovimento(Posicao origem, Posicao alvo) {
 		Peca p = tabuleiro.removePeca(origem); //remove a peça que o usuario que mecher
 		Peca pecaCapturada = tabuleiro.removePeca(alvo);//remove a peça que esta no lugar que o usuario que colocar a peça que ele esta movendo
@@ -178,6 +190,41 @@ public class PartidaDeXadrez {
 		return false;
 	}
 	
+	private boolean testeCheckMate(Color cor) {
+		if(!testeCheck(cor)) {//verifica se a peça esta em check se n tiver nem precisa fazer mais nada nesse metodo
+			return false;
+		}
+		
+		List<Peca> list = listaPecasDoTabuleiro.stream().filter(x -> ((PecaXadrez)x).getCorDaPeca() == cor).collect(Collectors.toList());
+		
+		for(Peca p : list) {
+			
+			boolean[][] mat = p.possívelMovimento();
+			
+			for(int i = 0; i < tabuleiro.getLinhas(); i ++ ) {
+				for(int j = 0; j < tabuleiro.getLinhas(); j ++ ) {
+					
+					if(mat[i][j]) {
+						
+						Posicao origem = ((PecaXadrez)p).getPosicaoXadrez().toPosicao();
+						Posicao alvo = new Posicao(i, j);
+						
+						Peca pecaCapturada = facaMovimento(origem,alvo);
+						
+						boolean testCheck = testeCheck(cor);
+						
+						desfazerMovimento(origem, alvo, pecaCapturada);
+						
+						if(!testCheck) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
 	private void coloqueNovaPeça(char coluna, int linha, PecaXadrez peca) {
 		PosicaoXadrez posicaoXadrez = new PosicaoXadrez(coluna, linha);
 		tabuleiro.coloquePeca(peca, posicaoXadrez.toPosicao());
@@ -186,19 +233,14 @@ public class PartidaDeXadrez {
 	}
 	
 	private void configuracaoInicial() {
-		coloqueNovaPeça('c', 1, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('c', 2, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('d', 2, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('e', 2, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('e', 1, new Torre(tabuleiro, Color.WHITE));
-		coloqueNovaPeça('d', 1, new Rei(tabuleiro, Color.WHITE));
+		
+		coloqueNovaPeça('h', 7, new Torre(tabuleiro, Color.WHITE));
+		coloqueNovaPeça('d', 1, new Torre(tabuleiro, Color.WHITE));
+		coloqueNovaPeça('e', 1, new Rei(tabuleiro, Color.WHITE));
 
-		coloqueNovaPeça('c', 7, new Torre(tabuleiro, Color.BLACK));
-		coloqueNovaPeça('c', 8, new Torre(tabuleiro, Color.BLACK));
-		coloqueNovaPeça('d', 7, new Torre(tabuleiro, Color.BLACK));
-		coloqueNovaPeça('e', 7, new Torre(tabuleiro, Color.BLACK));
-		coloqueNovaPeça('e', 8, new Torre(tabuleiro, Color.BLACK));
-		coloqueNovaPeça('d', 8, new Rei(tabuleiro, Color.BLACK));
+		coloqueNovaPeça('b', 8, new Torre(tabuleiro, Color.BLACK));
+		coloqueNovaPeça('a', 8, new Rei(tabuleiro, Color.BLACK));
+		
 		
 	}
 	

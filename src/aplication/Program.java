@@ -18,7 +18,7 @@ public class Program {
 		PartidaDeXadrez partidaDeXadrez = new PartidaDeXadrez();
 		List<PecaXadrez> listaPecasCapturadas = new ArrayList<>();
 		
-		while(true) {
+		while(!partidaDeXadrez.getCheckMate()) {//checkMate começa com false negado vai para true, sendo assim vai continuar ate q a variavel seja atualiza para true que negado sera false e sai do laço
 			try {
 				UI.limpaTela();
 				UI.printPartida(partidaDeXadrez, listaPecasCapturadas);
@@ -48,7 +48,8 @@ public class Program {
 				System.out.println(e.getMessage());
 				sc.nextLine();
 			}
-			
+			UI.limpaTela();
+			UI.printPartida(partidaDeXadrez, listaPecasCapturadas);
 		}
 		
 
