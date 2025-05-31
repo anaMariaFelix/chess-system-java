@@ -40,6 +40,7 @@ public abstract class PecaXadrez extends Peca{
 		return PosicaoXadrez.fromPosicao(posicao);//essa posição vem da herança
 	}
 
+						//isThereOpponentPiece
 	protected boolean existeUmaPecaAdversaria(Posicao posicao) {
 		PecaXadrez p = (PecaXadrez) getTabuleiro().peca(posicao);
 		return p != null && p.getCorDaPeca() != corDaPeca;

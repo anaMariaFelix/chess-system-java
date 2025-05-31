@@ -81,6 +81,7 @@ public class Tabuleiro {
 		return existePosicao(posicao.getLinha(), posicao.getColuna());
 	}
 	
+					//thereIsPiece
 	public boolean existePecaNessaPosicao(Posicao posicao) {
 		if(!existePosicao(posicao)) {
 			throw new TabuleiroException("Posição não existente no tabuleiro!");
